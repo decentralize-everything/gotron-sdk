@@ -161,6 +161,10 @@ func NewKeyForDirectICAP(rand io.Reader) *Key {
 	return key
 }
 
+func NewKey(rand io.Reader) (*Key, error) {
+	return newKey(rand)
+}
+
 func newKey(rand io.Reader) (*Key, error) {
 	privateKeyECDSA, err := ecdsa.GenerateKey(crypto.S256(), rand)
 	if err != nil {

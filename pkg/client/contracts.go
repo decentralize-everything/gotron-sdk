@@ -330,3 +330,24 @@ func (g *GrpcClient) GetContractABI(contractAddress string) (*core.SmartContract
 
 	return sm.Abi, nil
 }
+
+func (g *GrpcClient) GetContractInfo(contractAddress string) (*core.SmartContractDataWrapper, error) {
+	var err error
+	contractDesc, err := address.Base58ToAddress(contractAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := g.getContext()
+	defer cancel()
+
+	contractInfo, err := g.Client.GetContractInfo(ctx, GetMessageBytes(contractDesc))
+	if err != nil {
+		return nil, err
+	}
+	if contractInfo == nil {
+		return nil, fmt.Errorf("invalid contract info")
+	}
+
+	return contractInfo, nil
+}
